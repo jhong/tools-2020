@@ -1,16 +1,20 @@
 package tools.cmm;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DateUtil {
-//	static Logger logger = LoggerFactory.getLogger(DateUtil.class);
+	static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
+	public final static String DATE_FORMAT = "yyyy-MM-dd";
 	public final static String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
 	/**
@@ -52,30 +56,30 @@ public class DateUtil {
 		return szResult;
 	}
 	
-//	public static Calendar str2cal(String str, String format) {
-//		return str2cal(str, format, Locale.KOREA);
-//	}
-//	
-//	public static Calendar str2cal(String str, String format, Locale locale) {
-//		Calendar cal = null;
-//		if (StringUtils.isEmpty(str)) return cal;
-//		
-//		try {
-////			DateFormat formatter = new SimpleDateFormat(format);
-//			DateFormat formatter = new SimpleDateFormat(format, locale);
-//			Date date = (Date)formatter.parse(str); 
-//			
-//			cal = Calendar.getInstance();
-//			cal.setTime(date);
-//		} catch (NullPointerException e) {
-//			logger.error("fail in str2cal() str="+str+", format="+format, e);
-//		} catch (IllegalArgumentException e) {
-//			logger.error("fail in str2cal() str="+str+", format="+format, e);
-//		} catch (Exception e) {
-//			logger.error("fail in str2cal() str="+str+", format="+format, e);
-//		}
-//		return cal;
-//	}
+	public static Calendar str2cal(String str, String format) {
+		return str2cal(str, format, Locale.KOREA);
+	}
+	
+	public static Calendar str2cal(String str, String format, Locale locale) {
+		Calendar cal = null;
+		if (StringUtils.isEmpty(str)) return cal;
+		
+		try {
+//			DateFormat formatter = new SimpleDateFormat(format);
+			DateFormat formatter = new SimpleDateFormat(format, locale);
+			Date date = (Date)formatter.parse(str); 
+			
+			cal = Calendar.getInstance();
+			cal.setTime(date);
+		} catch (NullPointerException e) {
+			logger.error("fail in str2cal() str="+str+", format="+format, e);
+		} catch (IllegalArgumentException e) {
+			logger.error("fail in str2cal() str="+str+", format="+format, e);
+		} catch (Exception e) {
+			logger.error("fail in str2cal() str="+str+", format="+format, e);
+		}
+		return cal;
+	}
 	
 	public static String date2str(Date date, String format) {
 		if (date == null || StringUtils.isEmpty(format)) return null;

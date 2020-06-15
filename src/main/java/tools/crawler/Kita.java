@@ -1,16 +1,27 @@
 package tools.crawler;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import tools.cmm.DateUtil;
+import tools.data.DataInfo;
+import tools.data.DataManage;
 
 public class Kita {
+	static Logger logger = LoggerFactory.getLogger(Kita.class);
 
 	/**
 	 * KITA 공지사항 목록 페이지 파싱 수행
@@ -19,7 +30,9 @@ public class Kita {
 	 * @param doc
 	 * @throws Exception
 	 */
-	void parseKitaNoticeList(Document doc) throws Exception {
+	List<DataInfo> parseKitaNoticeList(Document doc) throws Exception {
+		List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
+		
 		// 공지사항 목록
 		Elements dataList = doc.select("div.boardList > ul > li");
 		Iterator dataIter = dataList.iterator();
@@ -40,11 +53,15 @@ public class Kita {
 				String detailKey = matcher.group(2);
 				
 				String detailUrl = "https://www.kita.net/asocGuidance/notice/noticeDetail.do?pageIndex="+pageIdx+"&nIndex="+detailKey;
-				kitaNoticeDetailUrl(detailUrl);
+				DataInfo dataInfo = kitaNoticeDetailUrl(detailUrl);
+				dataInfo.setUrl(detailUrl);
+				dataInfoList.add(dataInfo);
 			}
 			
 			break; // 테스트는 하나만
 		}
+		
+		return dataInfoList;
 	}
 
 	/**
@@ -54,18 +71,35 @@ public class Kita {
 	 * @param doc
 	 * @throws Exception
 	 */
-	void parseKitaNoticeDetail(Document doc) throws Exception {
+	DataInfo parseKitaNoticeDetail(Document doc) throws Exception {
 		Elements title = doc.select(".boardArea .sbjBox .sbj");
 		System.out.println("title="+title.text());
 		
 		Element hit = doc.selectFirst(".boardArea .sbjBox .infoView .info .hit");
 		System.out.println("hit="+hit.text());
-		
+
+		Element pubDate = doc.selectFirst(".boardArea .sbjBox .infoView .info .date");
+		System.out.println("pubDate="+pubDate.text());
+
 		Element content = doc.selectFirst(".txtArea");
 		System.out.println("content="+content.html());
+		
+		DataInfo data = new DataInfo();
+		data.setTitle(title.text());
+//		data.setUrl("");
+		data.setDataType("");
+		data.setSource("KITA");
+		data.setContent(content.html());
+		data.setHitCount(NumberUtils.toInt(StringUtils.replaceAll(hit.text(), "\\,", "")));
+		data.setPubDate(DateUtil.str2cal(StringUtils.strip(pubDate.text()), DateUtil.DATE_FORMAT).getTime());
+		data.setColDate(DateUtil.getCurrentDate());
+		data.setUseYn("Y");
+		logger.debug("parseKitaNoticeDetail() data={}", data);
+		
+		return data;
 	}
 	
-	public void kitaNoticeDetailUrl(String url) throws Exception {
+	public DataInfo kitaNoticeDetailUrl(String url) throws Exception {
 		System.out.println("\n\n-------------------------------");
 		System.out.println("[KITA 공지사항] "+url);
 		System.out.println("-------------------------------");
@@ -76,7 +110,8 @@ public class Kita {
 			e.printStackTrace();
 		}
 
-		parseKitaNoticeDetail(doc);
+		DataInfo data = parseKitaNoticeDetail(doc);
+		return data;
 	}
 
 	/**
@@ -93,7 +128,12 @@ public class Kita {
 			e.printStackTrace();
 		}
 		
-		parseKitaNoticeList(doc);
+		List<DataInfo> list = parseKitaNoticeList(doc);
+		
+		// DB 등록
+		for(DataInfo dataInfo : list) {
+			DataManage.insertData(dataInfo);
+		}
 	}
 	
 	/**
@@ -111,7 +151,12 @@ public class Kita {
 			e.printStackTrace();
 		}
 		
-		parseKitaNoticeList(doc);
+		List<DataInfo> list = parseKitaNoticeList(doc);
+		
+		// DB 등록
+		for(DataInfo dataInfo : list) {
+			DataManage.insertData(dataInfo);
+		}
 	}
 	
 	/**
@@ -128,7 +173,10 @@ public class Kita {
 			e.printStackTrace();
 		}
 		
-		parseKitaNoticeDetail(doc);
+		DataInfo data = parseKitaNoticeDetail(doc);
+		
+		// DB 저장
+		DataManage.insertData(data);
 	}
 	
 }
