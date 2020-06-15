@@ -14,7 +14,7 @@ public class DataManage {
 	 * @return
 	 * @throws Exception
 	 */
-	public DataInfo getData(int id) throws Exception {
+	public static DataInfo getData(int id) throws Exception {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
 		
@@ -35,7 +35,7 @@ public class DataManage {
 	 * @param data
 	 * @throws Exception
 	 */
-	public void insertData(DataInfo data) throws Exception {
+	public static void insertData(DataInfo data) throws Exception {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
 		
