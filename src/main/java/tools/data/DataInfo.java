@@ -17,7 +17,7 @@ import tools.cmm.Util;
 public class DataInfo {
 
 	@Id
-	@SequenceGenerator(name="DATA_ID", sequenceName="ZZ_DATA_ID_SEQ")
+	@SequenceGenerator(name="DATA_ID", sequenceName="ZZ_DATA_ID_SEQ") // oracle 에서 sequence 사용하여 ID 생성
 	@GeneratedValue(strategy = GenerationType.AUTO, generator="DATA_ID")
 	private Integer id;
 
