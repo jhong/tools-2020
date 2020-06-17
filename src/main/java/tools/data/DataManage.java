@@ -3,10 +3,14 @@ package tools.data;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tools.cmm.HibernateUtil;
 
 public class DataManage {
+	
+	static Logger logger = LoggerFactory.getLogger(DataManage.class);
 
 	/**
 	 * DATA 단건 조회
@@ -24,7 +28,7 @@ public class DataManage {
 		query.setParameter("id", id);
 		
 		DataInfo data = (DataInfo)query.uniqueResult();
-		System.out.println(data);
+		logger.info("data={}", data);
 		
 		session.close();
 		return data;

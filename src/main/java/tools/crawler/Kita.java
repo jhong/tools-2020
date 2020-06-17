@@ -39,15 +39,12 @@ public class Kita {
 			Element data = (Element)dataIter.next();
 			Element date = data.selectFirst("div.infoView > p.info > span.date");
 			Element link = data.selectFirst("a");
-			System.out.println(date.text()+"\t"+link.outerHtml());
+			logger.info("text={}, outerHtml={}", date.text(), link.outerHtml());
 			
 			// 공지사항 상세 페이지로 이동
 			Pattern pattern = Pattern.compile("fn_detail\\((\\d)\\, (\\d*)\\)");
 			Matcher matcher = pattern.matcher(link.outerHtml());
 			while (matcher.find()) {
-				System.out.println(matcher.group());
-				System.out.println(matcher.groupCount());
-				System.out.println(matcher.group(1)+", "+matcher.group(2));
 				String pageIdx = matcher.group(1);
 				String detailKey = matcher.group(2);
 				
@@ -72,16 +69,16 @@ public class Kita {
 	 */
 	DataInfo parseKitaNoticeDetail(Document doc) throws Exception {
 		Elements title = doc.select(".boardArea .sbjBox .sbj");
-		System.out.println("title="+title.text());
+		logger.info("title={}", title.text());
 		
 		Element hit = doc.selectFirst(".boardArea .sbjBox .infoView .info .hit");
-		System.out.println("hit="+hit.text());
+		logger.info("hit={}", hit.text());
 
 		Element pubDate = doc.selectFirst(".boardArea .sbjBox .infoView .info .date");
-		System.out.println("pubDate="+pubDate.text());
+		logger.info("pubDate={}", pubDate.text());
 
 		Element content = doc.selectFirst(".txtArea");
-		System.out.println("content="+content.html());
+		logger.info("content={}", content.html());
 		
 		DataInfo data = new DataInfo();
 		data.setTitle(title.text());
@@ -99,9 +96,10 @@ public class Kita {
 	}
 	
 	public DataInfo kitaNoticeDetailUrl(String url) throws Exception {
-		System.out.println("\n\n-------------------------------");
-		System.out.println("[KITA 공지사항] "+url);
-		System.out.println("-------------------------------");
+		logger.info("\n\n");
+		logger.info("-------------------------------");
+		logger.info("[KITA 공지사항] {}", url);
+		logger.info("-------------------------------");
 		
 		Document doc = Util.getJsoupDocumentByUrl(url);
 

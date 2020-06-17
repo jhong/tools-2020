@@ -5,10 +5,14 @@ import java.util.Iterator;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tools.cmm.Util;
 
 public class JsoupCrawler {
+	
+	static Logger logger = LoggerFactory.getLogger(JsoupCrawler.class);
 
 	/**
 	 * 위키피디아 페이지 파싱 수행
@@ -18,13 +22,13 @@ public class JsoupCrawler {
 	 */
 	void parseWiki(Document doc) throws Exception {
 		Elements tocs = doc.select("#toc");
-		System.out.println("tocs="+tocs.text());
+		logger.info("tocs={}", tocs.text());
 		
 		Elements links = doc.select("a[href]");
 		Iterator linksIter = links.iterator();
 		while (linksIter.hasNext()) {
 			Element link = (Element)linksIter.next();
-			System.out.println(link.text()+"\t"+link.outerHtml());
+			logger.info("text={}, outerHtml={}", link.text(), link.outerHtml());
 		}
 
 	}
@@ -48,7 +52,7 @@ public class JsoupCrawler {
 	 * @throws Exception
 	 */
 	public void wikiUrl(String url) throws Exception {
-		System.out.println("wikiByUrl() start... url="+url);
+		logger.info("wikiByUrl() start... url={}", url);
 		
 		Document doc = Util.getJsoupDocumentByUrl(url);
 		
