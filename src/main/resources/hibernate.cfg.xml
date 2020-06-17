@@ -12,6 +12,7 @@
         <property name="hibernate.connection.password">egov</property>
         <property name="hibernate.connection.pool_size">3</property>
         <property name="show_sql">true</property>
+        <property name="hibernate.id.new_generator_mappings">false</property>
         
         <!-- "No CurrentSessionContext configured" error 해결 위해 추가 -->
         <property name="hibernate.current_session_context_class">thread</property>

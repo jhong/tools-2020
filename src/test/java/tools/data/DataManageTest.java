@@ -29,8 +29,8 @@ public class DataManageTest {
 		data.setUseYn("N");
 		System.out.println("insertData() data="+data);
 		
-//		DataManage mng = new DataManage();
-//		DataManage.insertData(data);
+		DataManage mng = new DataManage();
+		DataManage.insertData(data);
 	}
 	
 }
