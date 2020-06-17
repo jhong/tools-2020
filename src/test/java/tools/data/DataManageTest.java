@@ -3,10 +3,14 @@ package tools.data;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tools.cmm.DateUtil;
 
 public class DataManageTest {
+	
+	static Logger logger = LoggerFactory.getLogger(DataManageTest.class);
 
 	@Test
 	public void getData() throws Exception {
@@ -14,7 +18,7 @@ public class DataManageTest {
 		
 //		DataManage mng = new DataManage();
 		DataInfo result = DataManage.getData(id);
-		System.out.println("getData() result="+result);
+		logger.info("getData() result={}", result);
 	}
 	
 	@Test
@@ -27,7 +31,7 @@ public class DataManageTest {
 		data.setPubDate(DateUtil.str2cal("2020-06-15", DateUtil.DATE_FORMAT).getTime());
 		data.setColDate(DateUtil.getCurrentDate());
 		data.setUseYn("N");
-		System.out.println("insertData() data="+data);
+		logger.info("insertData() data={}", data);
 		
 		DataManage mng = new DataManage();
 		DataManage.insertData(data);

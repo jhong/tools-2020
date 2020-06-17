@@ -4,10 +4,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tools.cmm.TestConstant;
 
 public class KitaTest {
+
+	static Logger logger = LoggerFactory.getLogger(KitaTest.class);
 
 	@Test
 	public void kitaNoticeListFile() throws Exception {
@@ -33,6 +37,14 @@ public class KitaTest {
 		crawler.kitaNoticeListUrl(url);
 	}
 
+	@Test
+	public void kitaNoticeDetailUrl() throws Exception {
+		String url = "https://www.kita.net/asocGuidance/notice/noticeDetail.do?nIndex=1799207";
+		
+		Kita crawler = new Kita();
+		crawler.kitaNoticeDetailUrl(url);
+	}
+
 	
 	@Test
 	public void regexTest() throws Exception {
@@ -42,9 +54,10 @@ public class KitaTest {
 
 		Matcher matcher = pattern.matcher(txt);
 		while (matcher.find()) {
-			System.out.println(matcher.group());
-			System.out.println(matcher.groupCount());
-			System.out.println(matcher.group(1)+", "+matcher.group(2));
+			logger.info("matcher.group()={}", matcher.group());
+			logger.info("matcher.groupCount()={}", matcher.groupCount());
+			logger.info("matcher.group(1)={}", matcher.group(1));
+			logger.info("matcher.group(2)={}", matcher.group(2));
 		}
 	}
 

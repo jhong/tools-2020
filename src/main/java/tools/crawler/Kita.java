@@ -1,6 +1,5 @@
 package tools.crawler;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.cmm.DateUtil;
+import tools.cmm.Util;
 import tools.data.DataInfo;
 import tools.data.DataManage;
 
@@ -40,15 +39,12 @@ public class Kita {
 			Element data = (Element)dataIter.next();
 			Element date = data.selectFirst("div.infoView > p.info > span.date");
 			Element link = data.selectFirst("a");
-			System.out.println(date.text()+"\t"+link.outerHtml());
+			logger.info("text={}, outerHtml={}", date.text(), link.outerHtml());
 			
 			// 공지사항 상세 페이지로 이동
 			Pattern pattern = Pattern.compile("fn_detail\\((\\d)\\, (\\d*)\\)");
 			Matcher matcher = pattern.matcher(link.outerHtml());
 			while (matcher.find()) {
-				System.out.println(matcher.group());
-				System.out.println(matcher.groupCount());
-				System.out.println(matcher.group(1)+", "+matcher.group(2));
 				String pageIdx = matcher.group(1);
 				String detailKey = matcher.group(2);
 				
@@ -73,16 +69,16 @@ public class Kita {
 	 */
 	DataInfo parseKitaNoticeDetail(Document doc) throws Exception {
 		Elements title = doc.select(".boardArea .sbjBox .sbj");
-		System.out.println("title="+title.text());
+		logger.info("title={}", title.text());
 		
 		Element hit = doc.selectFirst(".boardArea .sbjBox .infoView .info .hit");
-		System.out.println("hit="+hit.text());
+		logger.info("hit={}", hit.text());
 
 		Element pubDate = doc.selectFirst(".boardArea .sbjBox .infoView .info .date");
-		System.out.println("pubDate="+pubDate.text());
+		logger.info("pubDate={}", pubDate.text());
 
 		Element content = doc.selectFirst(".txtArea");
-		System.out.println("content="+content.html());
+		logger.info("content={}", content.html());
 		
 		DataInfo data = new DataInfo();
 		data.setTitle(title.text());
@@ -100,15 +96,12 @@ public class Kita {
 	}
 	
 	public DataInfo kitaNoticeDetailUrl(String url) throws Exception {
-		System.out.println("\n\n-------------------------------");
-		System.out.println("[KITA 공지사항] "+url);
-		System.out.println("-------------------------------");
-		Document doc = null;
-		try {
-			doc = Jsoup.connect(url).get();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		logger.info("\n\n");
+		logger.info("-------------------------------");
+		logger.info("[KITA 공지사항] {}", url);
+		logger.info("-------------------------------");
+		
+		Document doc = Util.getJsoupDocumentByUrl(url);
 
 		DataInfo data = parseKitaNoticeDetail(doc);
 		return data;
@@ -120,13 +113,7 @@ public class Kita {
 	 * @throws Exception
 	 */
 	public void kitaNoticeListFile(String filePath) throws Exception {
-		File input = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(input, "UTF-8");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByFile(filePath);
 		
 		List<DataInfo> list = parseKitaNoticeList(doc);
 		
@@ -144,12 +131,7 @@ public class Kita {
 	 * @throws Exception
 	 */
 	public void kitaNoticeListUrl(String url) throws Exception {
-		Document doc = null;
-		try {
-			doc = Jsoup.connect(url).get();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByUrl(url);
 		
 		List<DataInfo> list = parseKitaNoticeList(doc);
 		
@@ -165,13 +147,7 @@ public class Kita {
 	 * @throws Exception
 	 */
 	public void kitaNoticeDetailFile(String filePath) throws Exception {
-		File input = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(input, "UTF-8");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByFile(filePath);
 		
 		DataInfo data = parseKitaNoticeDetail(doc);
 		
