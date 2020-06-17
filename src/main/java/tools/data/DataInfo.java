@@ -16,7 +16,7 @@ import tools.cmm.Util;
 public class DataInfo {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	@Column(name = "title")	private String title;
