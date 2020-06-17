@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -16,7 +17,8 @@ import tools.cmm.Util;
 public class DataInfo {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name="DATA_ID", sequenceName="ZZ_DATA_ID_SEQ") // oracle 에서 sequence 사용하여 ID 생성
+	@GeneratedValue(strategy = GenerationType.AUTO, generator="DATA_ID")
 	private Integer id;
 
 	@Column(name = "title")	private String title;
