@@ -33,8 +33,11 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.17.Final'
     compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.4.17.Final'
     
+    // oracle
+    compile files('./src/libs/ojdbc-14.jar')
+
     // mysql
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
+    //compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.20'
     
     // commons
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
