@@ -1,6 +1,5 @@
 package tools.crawler;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tools.cmm.DateUtil;
+import tools.cmm.Util;
 import tools.data.DataInfo;
 import tools.data.DataManage;
 
@@ -103,12 +102,8 @@ public class Kita {
 		System.out.println("\n\n-------------------------------");
 		System.out.println("[KITA 공지사항] "+url);
 		System.out.println("-------------------------------");
-		Document doc = null;
-		try {
-			doc = Jsoup.connect(url).get();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		
+		Document doc = Util.getJsoupDocumentByUrl(url);
 
 		DataInfo data = parseKitaNoticeDetail(doc);
 		return data;
@@ -120,13 +115,7 @@ public class Kita {
 	 * @throws Exception
 	 */
 	public void kitaNoticeListFile(String filePath) throws Exception {
-		File input = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(input, "UTF-8");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByFile(filePath);
 		
 		List<DataInfo> list = parseKitaNoticeList(doc);
 		
@@ -144,12 +133,7 @@ public class Kita {
 	 * @throws Exception
 	 */
 	public void kitaNoticeListUrl(String url) throws Exception {
-		Document doc = null;
-		try {
-			doc = Jsoup.connect(url).get();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByUrl(url);
 		
 		List<DataInfo> list = parseKitaNoticeList(doc);
 		
@@ -165,13 +149,7 @@ public class Kita {
 	 * @throws Exception
 	 */
 	public void kitaNoticeDetailFile(String filePath) throws Exception {
-		File input = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(input, "UTF-8");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByFile(filePath);
 		
 		DataInfo data = parseKitaNoticeDetail(doc);
 		

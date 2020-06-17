@@ -1,12 +1,12 @@
 package tools.crawler;
 
-import java.io.File;
 import java.util.Iterator;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import tools.cmm.Util;
 
 public class JsoupCrawler {
 
@@ -35,13 +35,7 @@ public class JsoupCrawler {
 	 * @throws Exception
 	 */
 	public void wikiFile(String filePath) throws Exception {
-		File input = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(input, "UTF-8");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByFile(filePath);
 		
 		parseWiki(doc);
 	}
@@ -56,12 +50,7 @@ public class JsoupCrawler {
 	public void wikiUrl(String url) throws Exception {
 		System.out.println("wikiByUrl() start... url="+url);
 		
-		Document doc = null;
-		try {
-			doc = Jsoup.connect(url).get();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		Document doc = Util.getJsoupDocumentByUrl(url);
 		
 		parseWiki(doc);
 	}

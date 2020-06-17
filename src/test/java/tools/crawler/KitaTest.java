@@ -33,6 +33,14 @@ public class KitaTest {
 		crawler.kitaNoticeListUrl(url);
 	}
 
+	@Test
+	public void kitaNoticeDetailUrl() throws Exception {
+		String url = "https://www.kita.net/asocGuidance/notice/noticeDetail.do?nIndex=1799207";
+		
+		Kita crawler = new Kita();
+		crawler.kitaNoticeDetailUrl(url);
+	}
+
 	
 	@Test
 	public void regexTest() throws Exception {
